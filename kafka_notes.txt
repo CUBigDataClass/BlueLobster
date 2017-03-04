@@ -1,0 +1,189 @@
+Kafka Notes
+--------------------------------------------------------------------------------------------------------------------------------
+Terminology:
+Producer - application sends data to 
+
+A message is a ine of text, if you want to send the result of a query
+you create a producer application, fire a query against database,
+collect result, and send each row as a message. 
+
+Sending data w/ kafa requires:
+  - Creating producer application
+  - Sending a message
+  - Sends to the Kafka Server
+
+Consumer: 
+  - Application that recieves data (sent by producer)
+  - Requests data sent to a Kafka server
+  - Create consumer application
+  - Request message from Kafka Server
+  - Recieve messages (as lines)
+  - Request more messages
+
+What is a cluster?
+  - computers sharing the workload
+  - Each computer executes an instance of Kafka Broker 
+  - Consumer asks for data from Kafka Broker
+  - Consumer has to ask for data sent for:
+    - Type of Data, and Producer creating it 
+    - 'Topic' -- unique name for a data stream
+    - Consumer 'subscribes' to a topic
+
+Partitions:
+  - A kafka broker can have too much data in a topic
+  - If larger than storage capacity of broker, create partition
+  - Partition number is created by programmer
+  - Created when creating the topic
+  - Every partition sits on a single machine (cannot be broken again)
+  - Calculate number of partitions ahead of time
+
+Offset:
+  - Sequence id given to message in a partition
+  - Immutable
+  - Kafka stores messages in order of arrival
+  - Starts at 0, then offest moves to 1, etc...
+  - No global offset across partitions
+
+Locating message - What you need:
+  - Topic Name
+  - Partition Number
+  - Offset Number
+
+Consumer Groups:
+  - A group of consumers so many consumers can from a group to share the
+    work
+  - How to handle high number of producers pushing data into a single
+    topic
+  - Use several brokers to share the work load
+  - Have multiple consumers divide amongst the multiple brokers
+  - The maximum number of consumers in a group is the total number of
+    partitions you have in a topic
+  - Kafka doesn't allow multiple consumers to read from the same
+    partition in parallel
+
+
+Zookeeper:
+  - Used to provide coordination in distributed systems
+
+--------------------------------------------------------------------------------------------------------------------------------
+Start Demo:
+Download kafka
+tar -xzf kafka_2.11-0.10.1.1.tgz
+cd kafka_2.11-0.10.1.1
+
+bin/zookeeper-server-start.sh config/zookeeper.properties   #1 notes
+
+bin/kafka-server-start.sh config/server.properties          #2 notes
+
+bin/kafka-topics.sh --zookeper localhost:#### --create --topic
+DemoTopic1 --partitions 2 --replication-factor 1               #3 notes
+
+bin/kafka-console-producer.sh --broker-list localhost:#### --topic
+DemoTopic1                                                  #4 notes
+
+bin/kafka-console-consumer.sh --bootstrap-server lokalhost:#### --topic
+DemoTopic1                                                  #5 notes
+
+now in producer console you can type messages that appear in consumer
+console
+
+notes: 
+bin contains Kafka tools
+config contains configuration files
+libs contain java files
+
+in bin kafka has tool to start zookeeper
+kafka will try to create partitions evenly over brokers
+
+
+#1
+Start Zookeeper w/ config file
+(takes one parameter, the config file, utility to start zookeeper)
+(readout INFO binding to port 0.0.0.0/0.0.0.0:####  #### - port number)
+(port number needed to start kafka broker)
+
+#2
+Start Kafak w/ config file
+part of default kafka installation 
+should end w/ started (kafka.server.KafkaServer)
+
+#3
+Create Topic w/ set ID params
+First param: zookeeper addr and port
+Second param: Create command from topic management tool (using create)
+Third param: Topic name
+Fourth: Number of partitions
+Fifth: Replication factor
+
+#4
+Create a producer with console input
+First Param: Broker addr, broker running on local host
+Entering gets producer up and running
+anything typed in console is sent to broker
+
+
+#5
+Create a consumer
+First Param: bootstrap is same meaning as broker-list
+Params: All other params are same as producer
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+Fault Tolerance
+
+Definition: Making your data availible in case of failures
+
+Solution: Keep data on different machines (replication factor)
+e.g. replication factor 3 = copies kept on 3 machines
+
+Replication factor set for topics, not partitions. Replication is
+applied to all partitions.
+
+Leader Follower model
+  - Leader takes care of all client interactions
+  - Producer and Consumer are handled through leader partition
+  - For every partition there is a leader 
+  - Follower replication partitions copy data from leader partition
+
+Create topic with partition number of 3:
+Script for starting multiple brokers on one machine:
+cp config/server.properties config/server-1.properties
+cp config/server.properties config/server-2.properties
+vim config/server-1.properties 
+bin/kafka-server-start.sh config/server-1.properties &
+bin/kafka-server-start.sh config/server-2.properties &
+
+bin/kafka-topics.sh --zookeeper localhost:2181 --create --topic
+TestTopicXYZ --partitions 2 --replication-factor 3
+
+#Describe command:
+bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic
+TestTopicXYZ 
+
+
+
+
+
+
+Notes:
+Make copy of broker config file and modify it
+Properties to be modified:
+broker.id : Change for each broker (0,1,2)    #line 20
+listeners : Network port number broker will bind to  #line 30 
+increment by 1, only changing because starting on single machine
+logs.dirs : broker log directory, want brokers to write  #line 56
+to different directories, increment by = (/tmp/kafka-logs-1)
+
+Describe command:
+Shows topic name, number of partitions, replication factor, etc.
+Each row is a partition with following information
+Info: (id, Leader=(broker number), Replicas: (list of replicas, brokers
+that hold copies), Isr: (list of in sync replicas, if match replicas,
+all in sync))
+
+
+
+  
+
+
+
