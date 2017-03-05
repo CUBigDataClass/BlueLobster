@@ -161,10 +161,6 @@ bin/kafka-topics.sh --zookeeper localhost:2181 --describe --topic
 TestTopicXYZ 
 
 
-
-
-
-
 Notes:
 Make copy of broker config file and modify it
 Properties to be modified:
@@ -181,8 +177,18 @@ Info: (id, Leader=(broker number), Replicas: (list of replicas, brokers
 that hold copies), Isr: (list of in sync replicas, if match replicas,
 all in sync))
 
+--------------------------------------------------------------------------------------------------------------------------------
 
-
+Broker Parameters
+zookeeper.connect : 
+  - connection string is a hostname with a port number
+  - every broker runs on a different system
+delete.topic.enable :
+  - by default not allowed
+  - if enabled allows you to remove topic on the fly
+  - can be helpful for development or testing
+auto.create.topics.enable :
+  - 
   
 
 
