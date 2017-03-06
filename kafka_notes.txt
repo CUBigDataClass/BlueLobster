@@ -165,7 +165,7 @@ Notes:
 Make copy of broker config file and modify it
 Properties to be modified:
 broker.id : Change for each broker (0,1,2)    #line 20
-listeners : Network port number broker will bind to  #line 30 
+listeners : Network port number broker will bind to  #line 34
 increment by 1, only changing because starting on single machine
 logs.dirs : broker log directory, want brokers to write  #line 56
 to different directories, increment by = (/tmp/kafka-logs-1)
