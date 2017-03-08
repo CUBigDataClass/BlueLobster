@@ -34,3 +34,4 @@
 [2017-03-08 11:23:20,856] INFO [ReplicaFetcherManager on broker 0] Removed fetcher for partitions twitter-topic-0 (kafka.server.ReplicaFetcherManager)
 [2017-03-08 11:23:20,861] INFO New leader is 0 (kafka.server.ZookeeperLeaderElector$LeaderChangeListener)
 [2017-03-08 11:28:54,995] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
+[2017-03-08 11:38:50,225] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
