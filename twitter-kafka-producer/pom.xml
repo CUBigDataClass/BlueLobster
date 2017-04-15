@@ -49,11 +49,11 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.roufid.tutorials.AppTest</mainClass>
+							<mainClass>com.saurzcode.twitter;</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>	
+	</build>
 </project>
