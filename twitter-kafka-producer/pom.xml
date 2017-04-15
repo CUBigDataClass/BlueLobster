@@ -49,7 +49,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.saurzcode.twitter;</mainClass>
+							<mainClass>com.saurzcode.twitter.TwitterKafkaProducer</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
