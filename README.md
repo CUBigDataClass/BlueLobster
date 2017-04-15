@@ -7,7 +7,9 @@ Each of the following scripts will not be able to run as a daemon
 </br>
 <code>
 cd kafka/kafka_2.11-0.10.2.0
+</code>
 </br>
+<code>
 . 1_start_server.sh
 </code>
 </br>
