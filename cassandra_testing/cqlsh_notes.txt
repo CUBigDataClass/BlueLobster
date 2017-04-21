@@ -1,3 +1,5 @@
+pip install cassandra-driver
+
 DESCRIBE keyspaces
 
 USE json_data ;

@@ -7,6 +7,8 @@ with open('twitter.json') as data_file:
 twitter_text = data["text"]
 twitter_id = data["id"]
 screen_name = data["user"]["screen_name"]
+
+# Doing mod 100 because it isn't an int otherwise
 twitter_id = twitter_id % 100
 
 cluster = Cluster()
