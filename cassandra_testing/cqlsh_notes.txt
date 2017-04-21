@@ -1,0 +1,9 @@
+DESCRIBE keyspaces
+
+USE json_data ;
+
+CREATE TABLE tweets( 
+    tweets_id int PRIMARY KEY,  
+    tweets_name text,
+    tweets_contents text
+    );
