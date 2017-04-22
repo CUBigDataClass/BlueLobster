@@ -19,6 +19,6 @@ for message in consumer:
             """,
             (twitter_id, screen_name, twitter_text)
             )
-
+    print twitter_text
 
 # Doing mod 100 because it isn't an int otherwise
