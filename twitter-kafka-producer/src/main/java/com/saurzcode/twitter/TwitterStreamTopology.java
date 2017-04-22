@@ -24,11 +24,11 @@ public class TwitterStreamTopology {
 		Config config = new Config();
 		config.setDebug(true);
 		
-		// set kafka properties
+		// configure kafka properties
 		String topicName = "twitter-topic";
 		String zkConnString = "localhost:9092";
 		
-
+		// set up generic kafka spout
 		BrokerHosts hosts = new ZkHosts(zkConnString);
 		SpoutConfig spoutConfig = new SpoutConfig(hosts, topicName, "/" + topicName, UUID.randomUUID().toString());
 		spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
