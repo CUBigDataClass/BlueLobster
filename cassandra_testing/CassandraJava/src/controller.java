@@ -15,6 +15,7 @@ public class controller {
         
 		for(Iterator<Tweets> iter = list.listIterator(); iter.hasNext(); ) {
 			Tweets a = iter.next();
+			
 			// manipulate tweet data
 	        System.out.println(a.getState_name());
 	        System.out.println(a.getState_sentiment());

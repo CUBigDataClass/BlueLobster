@@ -36,8 +36,7 @@ public class CassandraController {
 			   Tweets tweets = new Tweets();
 			   tweets.setId(row.getInt("id"));
 			   tweets.setState_name(row.getString("state_name"));
-			   String sentiment = row.getString("state_sentiment");
-			   tweets.setState_sentiment(Integer.parseInt(sentiment));
+			   tweets.setState_sentiment(row.getInt("state_sentiment"));
 			   
 			   allTweets.addTweet(tweets);		   
 

@@ -4,6 +4,8 @@ Install Cassandra Locally </br>
 
 Install CQLSH locally </br>
 
+pip install cassandra-driver
+
 Type command: </br>
 <code>
 cqlsh
