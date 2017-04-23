@@ -21,6 +21,8 @@ import com.twitter.joauth.UrlCodec;
 import org.junit.Assert;
 
 public class TwitterKafkaProducer {
+	
+	public Client client;
 
 	private static final String topic = "twitter-topic";
 
@@ -33,10 +35,12 @@ public class TwitterKafkaProducer {
 		properties.put("serializer.class", "kafka.serializer.StringEncoder");
 		properties.put("client.id","camus");
 		ProducerConfig producerConfig = new ProducerConfig(properties);
+
 		kafka.javaapi.producer.Producer<String, String> producer = new kafka.javaapi.producer.Producer<String, String>(
 				producerConfig);
 
 		BlockingQueue<String> queue = new LinkedBlockingQueue<String>(10000);
+	
 		
 
 		// add some track terms
@@ -67,19 +71,23 @@ public class TwitterKafkaProducer {
 		client.connect();
 
 		// Do whatever needs to be done with messages
-		for (int msgRead = 0; msgRead < 1000; msgRead++) {
+		for (int msgRead = 0; msgRead < 100000; msgRead++) {
 			KeyedMessage<String, String> message = null;
 			try {
 				message = new KeyedMessage<String, String>(topic, queue.take());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+
 			}
 			producer.send(message);
 		}
 		producer.close();
 		client.stop();
 
+
 	}
+	
+
 
 	public static void main(String[] args) {
 		try {
