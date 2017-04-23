@@ -19,5 +19,5 @@ for i in range(0, len(codes)-1):
             INSERT INTO storm_data (id, state_name, state_sentiment)
             VALUES (%s, %s, %s)
             """,
-            (i, codes[i], str(rand_sent))
+            (i, codes[i], rand_sent)
             )
