@@ -7,7 +7,7 @@ public class CassandraController {
 	   public Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
 	   /** Cassandra Session. */
 	   
-	   public Session session = cluster.connect("json_data");
+	   public Session session = cluster.connect("storm");
 	   /**
 	    * Connect to Cassandra Cluster specified by provided node IP
 	    * address and port number.
@@ -31,12 +31,13 @@ public class CassandraController {
 	   
 	   public AllTweets getTweets(){
            AllTweets allTweets = new AllTweets();
-		   ResultSet results = session.execute("SELECT * FROM tweets");
+		   ResultSet results = session.execute("SELECT * FROM storm_data");
 		   for (Row row: results){
 			   Tweets tweets = new Tweets();
-			   tweets.setTweets_content(row.getString("tweets_contents"));
-			   tweets.setTweets_id(row.getInt("tweets_id"));
-			   tweets.setTweets_name(row.getString("tweets_name"));
+			   tweets.setId(row.getInt("id"));
+			   tweets.setState_name(row.getString("state_name"));
+			   String sentiment = row.getString("state_sentiment");
+			   tweets.setState_sentiment(Integer.parseInt(sentiment));
 			   
 			   allTweets.addTweet(tweets);		   
 

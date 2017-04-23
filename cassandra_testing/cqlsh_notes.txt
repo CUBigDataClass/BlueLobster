@@ -4,19 +4,16 @@ DESCRIBE keyspaces
 
 USE json_data ;
 
-CREATE TABLE tweets( 
-    tweets_id int PRIMARY KEY,  
+CREATE TABLE tweets(
+    tweets_id int PRIMARY KEY,
     tweets_name text,
     tweets_contents text
     );
 
-CREATE KEYSPACE storm;
+CREATE KEYSPACE storm WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
 
 CREATE TABLE storm_data (
     id int PRIMARY KEY,
     state_name text,
-    state_sentiment text
+    state_sentiment int
     );
-
-CREATE TABLE 
-
