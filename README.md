@@ -1,5 +1,12 @@
 Useful links: </br>
-slf4j API documentation: https://www.slf4j.org/manual.html
+slf4j API documentation: https://www.slf4j.org/manual.html </br>
+Cassandra in Python:
+http://datastax.github.io/python-driver/getting_started.html
+</br>
+Cassandra in python installation: </br>
+<code>
+pip install cassandra-driver </br>
+</code>
 
 
 Info for getting kafka started on AWS with twitter feed:
