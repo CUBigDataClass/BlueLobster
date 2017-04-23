@@ -9,3 +9,14 @@ CREATE TABLE tweets(
     tweets_name text,
     tweets_contents text
     );
+
+CREATE KEYSPACE storm;
+
+CREATE TABLE storm_data (
+    id int PRIMARY KEY,
+    state_name text,
+    state_sentiment text
+    );
+
+CREATE TABLE 
+

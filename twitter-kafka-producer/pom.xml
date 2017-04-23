@@ -70,23 +70,15 @@
 		</dependency>
 
        <!-- https://mvnrepository.com/artifact/junit/junit -->
-<<<<<<< HEAD
+
 		<dependency>
 		    <groupId>junit</groupId>
 		    <artifactId>junit</artifactId>
 		    <version>4.12</version>
 		</dependency>
        
-      
-=======
-<dependency>
-    <groupId>junit</groupId>
-    <artifactId>junit</artifactId>
-    <version>4.12</version>
-</dependency>
-       
-       
->>>>>>> storm
+        
+    
 	</dependencies>
 	<build>
 		<plugins>
