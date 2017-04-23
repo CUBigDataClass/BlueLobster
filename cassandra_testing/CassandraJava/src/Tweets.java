@@ -1,27 +1,27 @@
 
 
 public class Tweets {
-	private String tweets_content;
-	private String tweets_name;
-	private int tweets_id;
+	private String state_name;
+	private int state_sentiment;
+	private int id;
 	
-	public String getTweets_content() {
-		return tweets_content;
+	public String getState_name() {
+		return state_name;
 	}
-	public void setTweets_content(String tweets_content) {
-		this.tweets_content = tweets_content;
+	public void setState_name(String state_name) {
+		this.state_name = state_name;
 	}
-	public String getTweets_name() {
-		return tweets_name;
+	public int getState_sentiment() {
+		return state_sentiment;
 	}
-	public void setTweets_name(String tweets_name) {
-		this.tweets_name = tweets_name;
+	public void setState_sentiment(int state_sentiment) {
+		this.state_sentiment = state_sentiment;
 	}
-	public int getTweets_id() {
-		return tweets_id;
+	public int getId() {
+		return id;
 	}
-	public void setTweets_id(int tweets_id) {
-		this.tweets_id = tweets_id;
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }
