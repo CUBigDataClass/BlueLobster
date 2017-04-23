@@ -10,7 +10,11 @@ CREATE TABLE tweets(
     tweets_contents text
     );
 
+// Proper table build starts here
+
 CREATE KEYSPACE storm WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+
+USE storm;
 
 CREATE TABLE storm_data (
     id int PRIMARY KEY,
