@@ -7,9 +7,13 @@ for message in consumer:
     print '----------------'
     print '----------------'
     twitter = json.loads(message.value)
-    print twitter["text"]
-    print twitter["id"]
-    print twitter["user"]["screen_name"]
+    try:
+        print twitter["text"]
+        print twitter["id"]
+        print twitter["user"]["screen_name"]
+    except KeyError, e:
+        print 'error'
+        
 
 
 
