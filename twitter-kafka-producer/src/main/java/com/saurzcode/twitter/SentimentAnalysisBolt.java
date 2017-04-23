@@ -18,45 +18,28 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	
 	   private OutputCollector collector;
 	   
-	   // @Override
+	   @Override
 	   public void prepare(Map stormConf, TopologyContext context,
 	      OutputCollector collector) {
 	      this.collector = collector;
 	   }
 	   
-	  // @Override
+	   @Override
 	   public void execute(Tuple input) {
-	      String sentence = input.getString(0);
-	      String[] words = sentence.split(" ");
-	      
-	      String text = input.getStringByField("text");
-	      
-	      if (text != "US" || text != "test") {
-	    	  
-	      }
-	      
-	      for(String word: words) {
-	         word = word.trim();
-	         
-	         if(!word.isEmpty()) {
-	            word = word.toLowerCase();
-	            collector.emit(new Values(word));
-	         }
-	         
-	      }
+		   
 
-	      collector.ack(input);
+	      collector.emit(new Values(input));
 	   }
 	   
-	  // @Override
+	   @Override
 	   public void declareOutputFields(OutputFieldsDeclarer declarer) {
-	      declarer.declare(new Fields("word"));
+	      declarer.declare(new Fields("sentiment"));
 	   }
 
-	   //@Override
+	   @Override
 	   public void cleanup() {}
 	   
-	   //@Override
+	   @Override
 	   public Map<String, Object> getComponentConfiguration() {
 	      return null;
 	   }

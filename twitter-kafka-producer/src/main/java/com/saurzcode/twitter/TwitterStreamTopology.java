@@ -39,6 +39,7 @@ public class TwitterStreamTopology {
 		TopologyBuilder builder = new TopologyBuilder();
 		builder.setSpout("kafkaspout", kafkaSpout);
 		builder.setBolt("geo-filter", new LocationBolt()).shuffleGrouping("kafka-spout");
+		builder.setBolt("sentiment-analysis", new SentimentAnalysisBolt()).shuffleGrouping("");
 		
 		
 		
