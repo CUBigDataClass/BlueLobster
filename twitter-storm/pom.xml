@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>twitter-storm</groupId>
 	<artifactId>twitter-storm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version> 
 	<dependencies>
 		<dependency>
 			<groupId>com.twitter</groupId>
@@ -61,6 +61,29 @@
            <version>[4.0,)</version>
        </dependency>
        
+       <!-- https://mvnrepository.com/artifact/com.hmsonline/storm-cassandra -->
+		<dependency>
+		    <groupId>org.apache.storm</groupId>
+		    <artifactId>storm-cassandra</artifactId>
+		    <version>1.1.0</version>
+		</dependency>
+
+       <!-- https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all -->
+<dependency>
+    <groupId>org.apache.cassandra</groupId>
+    <artifactId>cassandra-all</artifactId>
+    <version>3.10</version>
+</dependency>
+
+       
+       <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core -->
+<dependency>
+    <groupId>com.datastax.cassandra</groupId>
+    <artifactId>cassandra-driver-core</artifactId>
+    <version>3.2.0</version>
+</dependency>
+
+       
 
        <!-- Google Maps API -->
        <dependency>
@@ -94,7 +117,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.saurzcode.twitter.TwitterStreamTopology</mainClass>
+							<mainClass>TwitterStreamTopology</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

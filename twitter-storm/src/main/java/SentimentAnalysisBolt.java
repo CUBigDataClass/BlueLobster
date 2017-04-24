@@ -16,7 +16,7 @@ import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.task.TopologyContext;
 
 import com.opencsv.*;
-
+ 
 
 @SuppressWarnings("serial")
 public class SentimentAnalysisBolt implements IRichBolt {
@@ -28,7 +28,7 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	      OutputCollector collector) {
 	      this.collector = collector;
 	   }
-	   
+	    
 	   @Override
 	   public void execute(Tuple input) {
 		  
