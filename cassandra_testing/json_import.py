@@ -1,8 +1,8 @@
 import json
 
-with open('twitter.json') as data_file:
+with open('states.json') as data_file:
         data = json.load(data_file)
 
-json_data = 'text'
-text = data[json_data].keys()
-print text
+text = data.keys()
+for i in range(0, len(data) - 1):
+    print text[i]
