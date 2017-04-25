@@ -15,8 +15,6 @@ access_secret = "gM0OzHZ3zaxycmEIE34m7CqtSg5SUsciI1mp7nLFfeHcP"
 class StdOutListener(StreamListener):
 
     def on_data(self, data):
-        my_data = json.loads(data)
-        print my_data['text']
         return True
 
     def on_error(self, status):
@@ -24,7 +22,7 @@ class StdOutListener(StreamListener):
     
 
 if __name__ == '__main__':
-    #handle twitter auth
+    #handle OAuth parameters with tweepy API
     l = StdOutListener()
     auth = OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_secret)
@@ -44,19 +42,23 @@ if __name__ == '__main__':
         results = ''
         counter = 0
         add = 0
-#        for i in range(0, 5):
+
+        #Loop until 5 things have been added to csv (wont get added if not ascii)
         while(counter < 5):
             try:
+                #This is checking to confirm if ascii or not
                 names[add].decode("ascii")
                 results += names[add] + ','
                 add += 1
                 counter += 1
             except:
+                #If not ascii move on to next thing to add
                 print 'not an ascii-encoded string'
                 add += 1
 
 
-
+        
+        #write the string to the file, currently results.csv
         target = open('results.csv', 'w')
         print results
         target.write(results)
