@@ -17,7 +17,7 @@ cd kafka/kafka_2.11-0.10.2.0
 </code>
 </br>
 <code>
-. zookeeper_start.sh </br>
+. zookeeper_start.sh <br />
 . 1_start_server.sh
 </code>
 </br>
@@ -27,8 +27,8 @@ cd kafka/kafka_2.11-0.10.2.0
 </code>
 </br>
 <code>
-. 2_start_server.sh
-. topic_start.sh </br>
+. 2_start_server.sh <br />
+. topic_start.sh 
 </code>
 </br>
 Now that the a kafka topic named 'twitter-topic' is running (with a replication
