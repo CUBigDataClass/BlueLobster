@@ -1,0 +1,5 @@
+String consumerKey = "84rkPla1s8RwhMes4i7DJh0KW";
+String consumerSecret = "113JMGoTaw1loYPyH31vWIrxkH8WmSD59UZzaFfdk7q7XHSiff";
+String accessToken = "174192901-LPIE59jibzDWqI1q6ZIwjYPWyr2RThMPSTzOK7M0";
+String accessSecret = "gM0OzHZ3zaxycmEIE34m7CqtSg5SUsciI1mp7nLFfeHcP";
+
