@@ -17,7 +17,10 @@ cd kafka/kafka_2.11-0.10.2.0
 </code>
 </br>
 <code>
-. zookeeper_start.sh <br />
+. zookeeper_start.sh 
+</code>
+</br>
+<code>
 . 1_start_server.sh
 </code>
 </br>
@@ -27,7 +30,10 @@ cd kafka/kafka_2.11-0.10.2.0
 </code>
 </br>
 <code>
-. 2_start_server.sh <br />
+. 2_start_server.sh 
+</code>
+</br>
+<code>
 . topic_start.sh 
 </code>
 </br>
