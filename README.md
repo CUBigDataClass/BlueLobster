@@ -17,6 +17,7 @@ cd kafka/kafka_2.11-0.10.2.0
 </code>
 </br>
 <code>
+. zookeeper_start.sh </br>
 . 1_start_server.sh
 </code>
 </br>
@@ -27,10 +28,12 @@ cd kafka/kafka_2.11-0.10.2.0
 </br>
 <code>
 . 2_start_server.sh
+. topic_start.sh </br>
 </code>
 </br>
 Now that the a kafka topic named 'twitter-topic' is running (with a replication
-factor of 3) we can start our twitter producer. 
+factor of 3) we can start our twitter producer. The file can be found in the
+directory twitter-kafa
 </br>
 <code>
 java -jar twitter.jar 
