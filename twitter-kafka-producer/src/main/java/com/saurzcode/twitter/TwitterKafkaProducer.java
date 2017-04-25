@@ -55,8 +55,6 @@ public class TwitterKafkaProducer {
 	            new Location(new Location.Coordinate(-124.8, 24.4), new Location.Coordinate(-66.9, 49.4))));
 	    Assert.assertEquals(endpoint.getPostParamString(), "locations=" + UrlCodec.encode("-124.8,24.4,-66.9,49.4"));
 	    
-		
-//		endpoint.locations(Lists.newArrayList("locations" + UrlCodec.encode("")));
 
 		Authentication auth = new OAuth1(consumerKey, consumerSecret, token,
 				secret);
