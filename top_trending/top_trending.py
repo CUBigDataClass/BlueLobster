@@ -3,9 +3,7 @@ import time
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-import json
 import sys
-import csv
 
 consumer_key = "84rkPla1s8RwhMes4i7DJh0KW"
 consumer_secret = "113JMGoTaw1loYPyH31vWIrxkH8WmSD59UZzaFfdk7q7XHSiff"
