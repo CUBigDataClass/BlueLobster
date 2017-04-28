@@ -17,7 +17,7 @@ for i in range(0, len(codes)-1):
     session.execute(
             """
             INSERT INTO storm_data (id, state_name, state_sentiment)
-            VALUES (%s, %s, %s)
+            VALUES (%s, %s, %s) USING TTL 30
             """,
             (i, codes[i], rand_sent)
             )
