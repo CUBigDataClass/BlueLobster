@@ -1,3 +1,2 @@
-/Users/parthmishra/Documents/workspace/twitter-storm/src/main/java/SentimentAnalysisBolt.java
-/Users/parthmishra/Documents/workspace/twitter-storm/src/main/java/TwitterStreamTopology.java
-/Users/parthmishra/Documents/workspace/twitter-storm/src/main/java/LocationBolt.java
+/Users/parthmishra/Documents/workspace/kafka-storm-integration/src/main/java/storm/KafkaStormIntegrationDemo.java
+/Users/parthmishra/Documents/workspace/kafka-storm-integration/src/main/java/storm/LoggerBolt.java
