@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +38,12 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.opencsv.*;
 
- 
+import clojure.uuid__init;
+
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 
 @SuppressWarnings("serial")
 public class SentimentAnalysisBolt implements IRichBolt {
@@ -97,6 +103,8 @@ public class SentimentAnalysisBolt implements IRichBolt {
 				   sentiment = getSentiment(cleanTweet);
 				   LOG.info(state);
 				   LOG.info(sentiment);
+				   
+				   writeToCassandra(state,sentiment);
 				   collector.emit(new Values(state,sentiment));
 			   }
 			   
@@ -263,6 +271,14 @@ public class SentimentAnalysisBolt implements IRichBolt {
 		   }
 		   
 		   return state;
+		   
+	   }
+	   
+	   public void writeToCassandra(String state, int sentiment) {
+		   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+		   Session session = cluster.connect("storm");
+		   
+		   session.execute("INSERT INTO storm_data (id,state_name, state_sentiment) VALUES (:s, :s, :d) USING TTL 30",UUID.randomUUID(),state,sentiment);
 		   
 	   }
 	   
