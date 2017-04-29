@@ -21,3 +21,9 @@ CREATE TABLE storm_data (
     state_name text,
     state_sentiment int
     );
+
+CREATE TABLE website_data (
+    id int PRIMARY KEY,
+    state_name text,
+    state_sentiment int
+    );
