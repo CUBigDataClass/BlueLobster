@@ -1,127 +1,84 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>twitter-storm</groupId>
-	<artifactId>twitter-storm</artifactId>
-	<version>0.0.1-SNAPSHOT</version> 
+	<groupId>com.aksain.kafka.integrations</groupId>
+	<artifactId>kafka-storm-integration</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<storm.version>1.0.2</storm.version> 
+		<kafka.version>0.8.2.2</kafka.version>
+	</properties>
+
 	<dependencies>
+		<!-- Storm library -->
 		<dependency>
-			<groupId>com.twitter</groupId>
-			<artifactId>hbc-core</artifactId> <!-- or hbc-twitter4j -->
-			<version>2.2.0</version> <!-- or whatever the latest version is -->
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-core</artifactId>
+			<version>${storm.version}</version>
 		</dependency>
+		<!-- Storm-Kafka integration library -->
+		<dependency>
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-kafka</artifactId>
+			<version>${storm.version}</version>
+		</dependency> 
+		<!-- Kafka client libraries as Storm-Kafka integration library does not include these -->
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.8.0</artifactId>
-			<version>0.8.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
+			<artifactId>kafka_2.11</artifactId>
+			<version>${kafka.version}</version>
 			<exclusions>
+				<!-- Excluded to avoid version issues between Kafka zookeeper api and 
+					Storm-kafka zookeeper api -->
 				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
+					<groupId>org.apache.zookeeper</groupId>
+					<artifactId>zookeeper</artifactId>
+				</exclusion>
+				<!-- Excluded to avoid Pre-emptive StackOverflowException due to version/implementation 
+					issues between Kafka slf4j/log4j api and Storm slf4j/log4js api -->
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.6.4</version>
-		</dependency>
+		
+		<!-- Gooogle Maps API -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.storm</groupId>
-			<artifactId>storm-core</artifactId>
-			<version>1.1.0</version>
-		</dependency>
-		
-		<dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>0.10.0.0</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.apache.storm/storm-kafka -->
-		<dependency>
-		    <groupId>org.apache.storm</groupId>
-		    <artifactId>storm-kafka</artifactId>
-		    <version>1.1.0</version>
-		</dependency>
-		
-	    <dependency>
-           <groupId>org.twitter4j</groupId>
-           <artifactId>twitter4j-core</artifactId>
-           <version>[4.0,)</version>
-       </dependency>
-       
-       <!-- https://mvnrepository.com/artifact/com.hmsonline/storm-cassandra -->
-		<dependency>
-		    <groupId>org.apache.storm</groupId>
-		    <artifactId>storm-cassandra</artifactId>
-		    <version>1.1.0</version>
-		</dependency>
-
-       <!-- https://mvnrepository.com/artifact/org.apache.cassandra/cassandra-all -->
-<dependency>
-    <groupId>org.apache.cassandra</groupId>
-    <artifactId>cassandra-all</artifactId>
-    <version>3.10</version>
-</dependency>
-
-       
-       <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core -->
-<dependency>
-    <groupId>com.datastax.cassandra</groupId>
-    <artifactId>cassandra-driver-core</artifactId>
-    <version>3.2.0</version>
-</dependency>
-
-       
-
-       <!-- Google Maps API -->
-       <dependency>
 		    <groupId>com.google.maps</groupId>
 		    <artifactId>google-maps-services</artifactId>
 		    <version>0.1.20</version>
 		</dependency>
-
-       <!-- https://mvnrepository.com/artifact/junit/junit -->
-
+		<!-- 
 		<dependency>
 		    <groupId>junit</groupId>
 		    <artifactId>junit</artifactId>
 		    <version>4.12</version>
 		</dependency>
-       
-        <dependency>
+       -->
+        <dependency> 
 		     <groupId>com.opencsv</groupId>
 		     <artifactId>opencsv</artifactId>
 		     <version>3.9</version>
  		</dependency>
-    
+ 		
+ 		<!-- Twitter4j -->
+				
+	    <dependency>
+           <groupId>org.twitter4j</groupId>
+           <artifactId>twitter4j-core</artifactId>
+           <version>[4.0,)</version>
+        </dependency>
+
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<!-- Build an executable JAR -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>TwitterStreamTopology</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
