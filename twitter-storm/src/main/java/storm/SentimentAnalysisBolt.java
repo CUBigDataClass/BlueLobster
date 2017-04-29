@@ -158,20 +158,27 @@ public class SentimentAnalysisBolt implements IRichBolt {
 		  
 	
 		   int sentiment = 0; // set to 0 since tweets are neutral if they can't be scored
-		  
+		   int sentiWords = 0;
 		   String[] words = tweet.split("\\s+");
 		   
 		   
 		   for (int i = 0; i < words.length; i++) {
 			   String word = words[i].toString();
-
+			   
 			   if (sentimap.containsKey(word.toString())) {
+				   sentiWords++;
 				   sentiment = sentiment + sentimap.get(word.toString());
 			   }
 		   }
 		   
+		   if (sentiWords == 0) {
+			   return sentiment;
+		   } else {
+			   sentiment = sentiment/sentiWords;
+		   }
 		   
 		   return sentiment;
+		   
 	   }
 	   
 	   public String getState(String tweet) throws ApiException, InterruptedException, IOException {
