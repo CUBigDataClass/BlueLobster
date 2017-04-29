@@ -36,6 +36,7 @@ public class TwitterKafkaProducer {
 		properties.put("client.id","camus");
 		ProducerConfig producerConfig = new ProducerConfig(properties);
 
+
 		kafka.javaapi.producer.Producer<String, String> producer = new kafka.javaapi.producer.Producer<String, String>(
 				producerConfig);
 
@@ -49,12 +50,21 @@ public class TwitterKafkaProducer {
 				"#AAPSweep"));
         
 		*/
-		
+
 	    StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
+		endpoint.trackTerms(Lists.newArrayList("Alabama", "Alaska", "Arizona ", "Arkansas ", "California", "Colorado",
+				"Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois",
+				"Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+				"Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+				"New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+				"Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
+				"Washington", "West Virginia", "Wisconsin", "Wyoming"));
+	    
+	/*
 	    endpoint.locations(Lists.newArrayList(
 	            new Location(new Location.Coordinate(-124.8, 24.4), new Location.Coordinate(-66.9, 49.4))));
 	    Assert.assertEquals(endpoint.getPostParamString(), "locations=" + UrlCodec.encode("-124.8,24.4,-66.9,49.4"));
-	    
+	  */  
 
 		Authentication auth = new OAuth1(consumerKey, consumerSecret, token,
 				secret);

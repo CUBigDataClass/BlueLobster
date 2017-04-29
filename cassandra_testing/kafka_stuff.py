@@ -11,10 +11,19 @@ for message in consumer:
         print twitter["text"]
         print twitter["id"]
         print twitter["user"]["screen_name"]
+
     except KeyError, e:
         print 'error'
+
+'''
+        print twitter["coordinates"]
+        print twitter["geo"]
+        print twitter["user"]["location"]
+        print twitter["user"]["coordinates"]
+        print twitter["user"]["geo"]
+
         
 
 
 
-
+'''

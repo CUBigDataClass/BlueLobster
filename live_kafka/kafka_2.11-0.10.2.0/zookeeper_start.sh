@@ -1,1 +1,1 @@
-bin/zookeeper_server_start.sh config/zookeeper_properties
+bin/zookeeper-server-start.sh config/zookeeper.properties
