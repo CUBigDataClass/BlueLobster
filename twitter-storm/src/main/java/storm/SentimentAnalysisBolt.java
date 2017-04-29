@@ -53,7 +53,9 @@ public class SentimentAnalysisBolt implements IRichBolt {
                "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
                "Washington", "West Virginia", "Wisconsin", "Wyoming"};
 	   
-	    
+	   public String[] firstWords = new String[] {"north","south","new","west","rhode"};
+	   public String[] secondWords = new String[] {"york","dakota","jersey","carolina","hampshire","virginia","mexico","island"};
+	   
 	   @Override 
 	   public void prepare(Map stormConf, TopologyContext context,
 	      OutputCollector collector) {
@@ -187,10 +189,74 @@ public class SentimentAnalysisBolt implements IRichBolt {
 		  
 		   String[] words = tweet.split("\\s+");
 		   
+		   // loop through tweet text words
 		   for (int i = 0; i < words.length; i++) {
 			   String word = words[i].toString();
+			  
+				
+			   // loop through states
 			   for (int j = 0; j < states.length; j++) {
-				   if (states[j].toLowerCase().equals(word)) {
+				   
+				   // case handling for two word states
+				   if (i != words.length - 1) { 
+					   
+					   String secondWord = words[i+1];   
+					   switch (word) {
+					   	
+						   case "new":
+							   if (secondWord.equals("york")) {
+								   state = "new york";
+							   }
+							
+							   if (secondWord.equals("jersey")) {
+								   state = "new jersey";
+							   }
+							   
+							   if (secondWord.equals("hampshire")) {
+								   state = "new hampshire";
+							   }
+							   
+							   if (secondWord.equals("mexico")) {
+								   state = "new mexico";
+							   }
+							
+						   case "north":
+							   
+							   if (secondWord.equals("carolina")) {
+								   state = "north carolina";
+							   }
+							   
+							   if (secondWord.equals("dakota")) {
+								   state = "north dakota";
+							   }
+						   
+						   case "south":
+							   
+							   if (secondWord.equals("dakota")) {
+								   state = "south dakota";
+							   }
+							   
+							   if (secondWord.equals("carolina")) {
+								   state = "south carolina";
+							   }
+							   
+						   case "west":
+							   
+							   if (secondWord.equals("virginia")) {
+								   state = "west virginia";
+							   }
+							
+						   case "rhode":
+							   
+							   if (secondWord.equals("island")) {
+								   state = "rhode island";
+							   }
+						  
+					   }
+				   
+				   }
+				   // default case for single words states e.g. Colorado
+				   if (states[j].toLowerCase().equals(words[i])) {
 					   state = word;
 				   }
 			   }
