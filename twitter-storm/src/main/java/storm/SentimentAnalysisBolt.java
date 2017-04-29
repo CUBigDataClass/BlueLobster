@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,14 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	   private OutputCollector collector;
 	   private static final Logger LOG = Logger.getLogger(SentimentAnalysisBolt.class);
 	   public  Map<String,Integer> sentimap=new HashMap<String,Integer>();
+	   public String[] states = new String[] {"Alabama", "Alaska", "Arizona ", "Arkansas ", "California", "Colorado",
+               "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois",
+               "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+               "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+               "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+               "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
+               "Washington", "West Virginia", "Wisconsin", "Wyoming"};
+	   
 	    
 	   @Override 
 	   public void prepare(Map stormConf, TopologyContext context,
@@ -67,57 +76,41 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	    
 	   @Override
 	   public void execute(Tuple input) {
-		  
+
 		   String tuple = input.getString(0);
-
+		   
 		   int sentiment = 0;
-		   String state = "N/A";
-		   String country = "N/A";		
+		   String state = "N/A";		
 		   try {
-
 			   
 			   JSONParser parser = new JSONParser();
 			   Object obj = parser.parse(tuple);
 			   JSONObject jsonObject = (JSONObject) obj;
-			   JSONObject coordinatesObj = (JSONObject) jsonObject.get("coordinates");
-			   if (coordinatesObj != null) { // only want tweets with locations for sentiment analysis
-				   JSONArray coordinatesArray = (JSONArray) coordinatesObj.get("coordinates");
-				   
-				   // get state, country
-				   Double lat = (Double) coordinatesArray.get(0);
-				   Double lng = (Double) coordinatesArray.get(1);
-
-				   String[] place = getState(lat,lng);
-				   state = place[0].toString();
-				   country = place[1].toString();
-				   //LOG.info(state);
-				   //LOG.info(country.getClass());
-				   String us = "US";
-				   if (country.equals(us)) {
-					   String tweetText = (String) jsonObject.get("text");
-					   String cleanTweet = cleanTweet(tweetText);
-					   sentiment = getSentiment(cleanTweet);
-					   
-				   }
+			   String tweetText = (String) jsonObject.get("text");
+			   String cleanTweet = cleanTweet(tweetText);
+			   state = getState(cleanTweet);
+			   
+			   // only compute sentiment of tweets that we can find a state for 
+			   if (!state.equals("N/A")) {
+				   sentiment = getSentiment(cleanTweet);
+				   LOG.info(state);
+				   LOG.info(sentiment);
 				   collector.emit(new Values(state,sentiment));
-				   Thread.sleep(2500);
 			   }
-			   
-		   } catch (IOException e) {
-			   
-		   } catch (NumberFormatException e) {
 			   
 		   } catch (ParseException e) {
 			   
-		   } catch (ApiException e) {
+		   } catch (NumberFormatException e) {
 	
+		   } catch (IOException e) {
+			   
+		   } catch (ApiException e) {
+
 		   } catch (InterruptedException e) {
 
 		   }
-		  
-		  
+				   
 
-	      //collector.emit(new Values(sentiment));
 	   }
 	   
 	   @Override
@@ -163,52 +156,40 @@ public class SentimentAnalysisBolt implements IRichBolt {
 
 	   public int getSentiment(String tweet) throws NumberFormatException, IOException {
 		  
-		   
+	
 		   int sentiment = 0; // set to 0 since tweets are neutral if they can't be scored
 		  
 		   String[] words = tweet.split("\\s+");
 		   
+		   
 		   for (int i = 0; i < words.length; i++) {
 			   String word = words[i].toString();
+
 			   if (sentimap.containsKey(word.toString())) {
 				   sentiment = sentiment + sentimap.get(word.toString());
 			   }
 		   }
 		   
+		   
 		   return sentiment;
 	   }
 	   
-	   public String[] getState(Double lat, Double lng) throws ApiException, InterruptedException, IOException {
-		   String GOOGLE_MAPS_API_KEY = "AIzaSyC75Z4Yh-jLF10CHeJz7uqAPi3-Qtmow10";
+	   public String getState(String tweet) throws ApiException, InterruptedException, IOException {
+		   
 		   String state = "N/A";
-		   String country = "N/A";
-
-		   LatLng latlng = new LatLng(lng,lat);
+		  
+		   String[] words = tweet.split("\\s+");
 		   
-		   
-		   GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
-		   GeocodingResult[] results =  GeocodingApi.reverseGeocode(context, latlng).await();	   
-		   
-		   if (results.length > 0) {
-			   for ( int i=0; i<results[0].addressComponents.length; i++) {
-				   
-				    for ( int j=0; j<results[0].addressComponents[i].types.length; j++) {
-				       
-				       if ( results[0].addressComponents[i].types[j].toString() == "administrative_area_level_1" ) {
-				    	   state = results[0].addressComponents[i].shortName;
-				       }
-				       
-				       if ( results[0].addressComponents[i].types[j].toString() == "country" ) {
-				    		   country = results[0].addressComponents[i].shortName;
-				       }
-				    
-				    }
-			   }	   
+		   for (int i = 0; i < words.length; i++) {
+			   String word = words[i].toString();
+			   for (int j = 0; j < states.length; j++) {
+				   if (states[j].toLowerCase().equals(word)) {
+					   state = word;
+				   }
+			   }
 		   }
 		   
-		   
-		   String[] place = new String[] {state,country};
-		   return place;
+		   return state;
 		   
 	   }
 	   

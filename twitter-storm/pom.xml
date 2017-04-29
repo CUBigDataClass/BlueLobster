@@ -71,6 +71,21 @@
 		     <artifactId>opencsv</artifactId>
 		     <version>3.9</version>
  		</dependency>
+ 		<!-- https://mvnrepository.com/artifact/com.hmsonline/storm-cassandra -->
+<dependency>
+    <groupId>org.apache.storm</groupId>
+    <artifactId>storm-cassandra</artifactId>
+    <version>1.0.2</version>
+</dependency>
+
+ 		<!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core -->
+<dependency>
+    <groupId>com.datastax.cassandra</groupId>
+    <artifactId>cassandra-driver-core</artifactId>
+    <version>3.2.0</version>
+</dependency>
+
+ 		
  		
  		<!-- Twitter4j -->
 				

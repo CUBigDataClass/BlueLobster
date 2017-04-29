@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.apache.storm.LocalCluster;
+import org.apache.storm.cassandra.bolt.CassandraWriterBolt;
+import org.apache.storm.cassandra.client.CassandraConf;
 import org.apache.storm.kafka.BrokerHosts;
 import org.apache.storm.kafka.KafkaSpout;
 import org.apache.storm.kafka.SpoutConfig;
@@ -11,6 +13,13 @@ import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Tuple;
+
+import clojure.lang.Named;
+
+import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
+import static org.apache.storm.cassandra.bolt.CassandraWriterBolt.*;
+import static org.apache.storm.cassandra.client.CassandraConf.*;
 
 import storm.LoggerBolt;
 
@@ -42,8 +51,23 @@ public class TwitterStreamTopology {
 		
 		//topologyBuilder.setBolt("locationbolt", new LocationBolt()).globalGrouping("kafka-spout");
 		topologyBuilder.setBolt("sentiment-analysis", new SentimentAnalysisBolt()).globalGrouping("kafka-spout");
-		topologyBuilder.setBolt("print-messages", new LoggerBolt()).globalGrouping("sentiment-analysis");
 
+
+		
+		
+	    CassandraWriterBolt cWB = new CassandraWriterBolt (
+	    		
+	    	
+	    		async(
+	                simpleQuery("INSERT INTO storm-data (state_name,sentiment) VALUES (?, ?);")
+	                    .with( fields("state","sentiment") )
+	                )
+	    		
+	    		
+	        );
+	    
+	   
+	    //topologyBuilder.setBolt("cassandra-bolt", cWB).globalGrouping("sentiment-analysis");
 		
 		// Submit topology to local cluster i.e. embedded storm instance in eclipse
 		final LocalCluster localCluster = new LocalCluster();
