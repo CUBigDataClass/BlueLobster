@@ -17,7 +17,7 @@ CREATE KEYSPACE storm WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replicat
 USE storm;
 
 CREATE TABLE storm_data (
-    id int PRIMARY KEY,
+    id uuid PRIMARY KEY,
     state_name text,
     state_sentiment int
     );

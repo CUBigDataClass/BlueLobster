@@ -4,9 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +38,12 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.opencsv.*;
 
- 
+import clojure.uuid__init;
+
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 
 @SuppressWarnings("serial")
 public class SentimentAnalysisBolt implements IRichBolt {
@@ -44,7 +51,17 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	   private OutputCollector collector;
 	   private static final Logger LOG = Logger.getLogger(SentimentAnalysisBolt.class);
 	   public  Map<String,Integer> sentimap=new HashMap<String,Integer>();
-	    
+	   public String[] states = new String[] {"Alabama", "Alaska", "Arizona ", "Arkansas ", "California", "Colorado",
+               "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois",
+               "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan",
+               "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+               "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+               "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
+               "Washington", "West Virginia", "Wisconsin", "Wyoming"};
+	   
+	   public String[] firstWords = new String[] {"north","south","new","west","rhode"};
+	   public String[] secondWords = new String[] {"york","dakota","jersey","carolina","hampshire","virginia","mexico","island"};
+	   
 	   @Override 
 	   public void prepare(Map stormConf, TopologyContext context,
 	      OutputCollector collector) {
@@ -67,57 +84,43 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	    
 	   @Override
 	   public void execute(Tuple input) {
-		  
+
 		   String tuple = input.getString(0);
-
+		   
 		   int sentiment = 0;
-		   String state = "N/A";
-		   String country = "N/A";		
+		   String state = "N/A";		
 		   try {
-
 			   
 			   JSONParser parser = new JSONParser();
 			   Object obj = parser.parse(tuple);
 			   JSONObject jsonObject = (JSONObject) obj;
-			   JSONObject coordinatesObj = (JSONObject) jsonObject.get("coordinates");
-			   if (coordinatesObj != null) { // only want tweets with locations for sentiment analysis
-				   JSONArray coordinatesArray = (JSONArray) coordinatesObj.get("coordinates");
+			   String tweetText = (String) jsonObject.get("text");
+			   String cleanTweet = cleanTweet(tweetText);
+			   state = getState(cleanTweet);
+			   
+			   // only compute sentiment of tweets that we can find a state for 
+			   if (!state.equals("N/A")) {
+				   sentiment = getSentiment(cleanTweet);
+				   LOG.info(state);
+				   LOG.info(sentiment);
 				   
-				   // get state, country
-				   Double lat = (Double) coordinatesArray.get(0);
-				   Double lng = (Double) coordinatesArray.get(1);
-
-				   String[] place = getState(lat,lng);
-				   state = place[0].toString();
-				   country = place[1].toString();
-				   //LOG.info(state);
-				   //LOG.info(country.getClass());
-				   String us = "US";
-				   if (country.equals(us)) {
-					   String tweetText = (String) jsonObject.get("text");
-					   String cleanTweet = cleanTweet(tweetText);
-					   sentiment = getSentiment(cleanTweet);
-					   
-				   }
+				   writeToCassandra(state,sentiment);
 				   collector.emit(new Values(state,sentiment));
-				   Thread.sleep(2500);
 			   }
-			   
-		   } catch (IOException e) {
-			   
-		   } catch (NumberFormatException e) {
 			   
 		   } catch (ParseException e) {
 			   
-		   } catch (ApiException e) {
+		   } catch (NumberFormatException e) {
 	
+		   } catch (IOException e) {
+			   
+		   } catch (ApiException e) {
+
 		   } catch (InterruptedException e) {
 
 		   }
-		  
-		  
+				   
 
-	      //collector.emit(new Values(sentiment));
 	   }
 	   
 	   @Override
@@ -163,52 +166,119 @@ public class SentimentAnalysisBolt implements IRichBolt {
 
 	   public int getSentiment(String tweet) throws NumberFormatException, IOException {
 		  
-		   
+	
 		   int sentiment = 0; // set to 0 since tweets are neutral if they can't be scored
-		  
+		   int sentiWords = 0;
 		   String[] words = tweet.split("\\s+");
+		   
 		   
 		   for (int i = 0; i < words.length; i++) {
 			   String word = words[i].toString();
+			   
 			   if (sentimap.containsKey(word.toString())) {
+				   sentiWords++;
 				   sentiment = sentiment + sentimap.get(word.toString());
 			   }
 		   }
 		   
-		   return sentiment;
-	   }
-	   
-	   public String[] getState(Double lat, Double lng) throws ApiException, InterruptedException, IOException {
-		   String GOOGLE_MAPS_API_KEY = "AIzaSyC75Z4Yh-jLF10CHeJz7uqAPi3-Qtmow10";
-		   String state = "N/A";
-		   String country = "N/A";
-
-		   LatLng latlng = new LatLng(lng,lat);
-		   
-		   
-		   GeoApiContext context = new GeoApiContext().setApiKey(GOOGLE_MAPS_API_KEY);
-		   GeocodingResult[] results =  GeocodingApi.reverseGeocode(context, latlng).await();	   
-		   
-		   if (results.length > 0) {
-			   for ( int i=0; i<results[0].addressComponents.length; i++) {
-				   
-				    for ( int j=0; j<results[0].addressComponents[i].types.length; j++) {
-				       
-				       if ( results[0].addressComponents[i].types[j].toString() == "administrative_area_level_1" ) {
-				    	   state = results[0].addressComponents[i].shortName;
-				       }
-				       
-				       if ( results[0].addressComponents[i].types[j].toString() == "country" ) {
-				    		   country = results[0].addressComponents[i].shortName;
-				       }
-				    
-				    }
-			   }	   
+		   if (sentiWords == 0) {
+			   return sentiment;
+		   } else {
+			   sentiment = sentiment/sentiWords;
 		   }
 		   
+		   return sentiment;
 		   
-		   String[] place = new String[] {state,country};
-		   return place;
+	   }
+	   
+	   public String getState(String tweet) throws ApiException, InterruptedException, IOException {
+		   
+		   String state = "N/A";
+		  
+		   String[] words = tweet.split("\\s+");
+		   
+		   // loop through tweet text words
+		   for (int i = 0; i < words.length; i++) {
+			   String word = words[i].toString();
+			  
+				
+			   // loop through states
+			   for (int j = 0; j < states.length; j++) {
+				   
+				   // case handling for two word states
+				   if (i != words.length - 1) { 
+					   
+					   String secondWord = words[i+1];   
+					   switch (word) {
+					   	
+						   case "new":
+							   if (secondWord.equals("york")) {
+								   state = "new york";
+							   }
+							
+							   if (secondWord.equals("jersey")) {
+								   state = "new jersey";
+							   }
+							   
+							   if (secondWord.equals("hampshire")) {
+								   state = "new hampshire";
+							   }
+							   
+							   if (secondWord.equals("mexico")) {
+								   state = "new mexico";
+							   }
+							
+						   case "north":
+							   
+							   if (secondWord.equals("carolina")) {
+								   state = "north carolina";
+							   }
+							   
+							   if (secondWord.equals("dakota")) {
+								   state = "north dakota";
+							   }
+						   
+						   case "south":
+							   
+							   if (secondWord.equals("dakota")) {
+								   state = "south dakota";
+							   }
+							   
+							   if (secondWord.equals("carolina")) {
+								   state = "south carolina";
+							   }
+							   
+						   case "west":
+							   
+							   if (secondWord.equals("virginia")) {
+								   state = "west virginia";
+							   }
+							
+						   case "rhode":
+							   
+							   if (secondWord.equals("island")) {
+								   state = "rhode island";
+							   }
+						  
+					   }
+				   
+				   }
+				   // default case for single words states e.g. Colorado
+				   if (states[j].toLowerCase().equals(words[i])) {
+					   state = word;
+				   }
+			   }
+		   }
+		   
+		   return state;
+		   
+	   }
+	   
+	   public void writeToCassandra(String state, int sentiment) {
+		   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
+		   Session session = cluster.connect("storm");
+		   
+		   session.execute("INSERT INTO storm_data (id,state_name, state_sentiment) VALUES (:s, :s, :d) USING TTL 30",UUID.randomUUID(),state,sentiment);
 		   
 	   }
 	   
