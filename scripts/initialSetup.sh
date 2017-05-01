@@ -2,7 +2,9 @@
 sudo yum install git 
 sudo yum install vim
 #install epel and pip
-sudo python easy_install pip
+curl -O https://bootstrap.pypa.io/get-pip.py
+python get-pip.py --user
+pip install awscli --upgrade --user
 #cassandra driver
 sudo pip install cassandra-driver
 
