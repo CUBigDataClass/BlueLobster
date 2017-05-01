@@ -104,7 +104,7 @@ public class SentimentAnalysisBolt implements IRichBolt {
 				   LOG.info(state);
 				   LOG.info(sentiment);
 				   
-				   writeToCassandra(state,sentiment);
+				   writeToCassandra(state,sentiment); 
 				   collector.emit(new Values(state,sentiment));
 			   }
 			   
