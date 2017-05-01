@@ -59,7 +59,7 @@ var legend = key.append("defs")
          .style("fill", "url(#gradient)")
          .attr("transform", "translate(0,10)");
 
-			var y = d3.scale.linear().range([300, 0]).domain([-5, 5]);
+			var y = d3.scale.linear().range([300, 0]).domain([-1, 1]);
 
 			var yAxis = d3.svg.axis().scale(y).orient("right");
 
@@ -90,7 +90,7 @@ var div = d3.select("body")
     		.style("opacity", 0);
 
 // Load in my states data!
-d3.csv("../query.csv", function(data) {
+d3.csv("../return.csv", function(data) {
 color.domain([-1,1]); // setting the range of the input data
 
 // Load GeoJSON data and merge with states data
