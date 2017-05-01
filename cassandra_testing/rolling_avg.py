@@ -25,16 +25,6 @@ while(True):
                 total_seen[i] += 1.0
 
 
-    print 'The sentiment of Alabama is: ', states[0]
-
-    for i in range(0, len(states)-1):
-        if(total_seen[i] == 0):
-            total_seen[i] = 1
-        print 'The sentiment of ', state_list[i], ' is ', states[i]
-        print 'With an average of: ', states[i]/total_seen[i]
-        print '------------', states[i], total_seen[i]
-
-
     for i in range(0, len(states)-1):
         if(total_seen[i] == 0):
             total_seen[i] = 1
@@ -46,3 +36,14 @@ while(True):
                 """,
                 (i, state_list[i], average)
                 )
+
+'''
+    print 'The sentiment of Alabama is: ', states[0]
+
+    for i in range(0, len(states)-1):
+        if(total_seen[i] == 0):
+            total_seen[i] = 1
+        print 'The sentiment of ', state_list[i], ' is ', states[i]
+        print 'With an average of: ', states[i]/total_seen[i]
+        print '------------', states[i], total_seen[i]
+'''
