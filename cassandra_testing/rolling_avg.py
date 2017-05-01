@@ -15,8 +15,6 @@ while(True):
     results = session.execute("SELECT * FROM storm_data")
     for x in results:
         rows = x
-
-        state_id = rows[0]
         state_name = rows[1]
         state_sentiment = rows[2]
         for i in range(0, len(state_list)-1):
@@ -37,13 +35,4 @@ while(True):
                 (i, state_list[i], average)
                 )
 
-'''
-    print 'The sentiment of Alabama is: ', states[0]
 
-    for i in range(0, len(states)-1):
-        if(total_seen[i] == 0):
-            total_seen[i] = 1
-        print 'The sentiment of ', state_list[i], ' is ', states[i]
-        print 'With an average of: ', states[i]/total_seen[i]
-        print '------------', states[i], total_seen[i]
-'''
