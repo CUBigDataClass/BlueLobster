@@ -14,7 +14,7 @@
                      //->withContactPoints('127.0.0.1')
                      ->build();
       $session   = $cluster->connect("storm");
-      $statement = new Cassandra\SimpleStatement("SELECT * FROM storm_data");
+      $statement = new Cassandra\SimpleStatement("SELECT * FROM website_data");
       $result    = $session->execute($statement);
       $session->close();
       $file = fopen('return.csv', 'w');
