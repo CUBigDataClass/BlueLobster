@@ -90,8 +90,8 @@ var div = d3.select("body")
     		.style("opacity", 0);
 
 // Load in my states data!
-d3.csv("../return.csv", function(data) {
-color.domain([-5,5]); // setting the range of the input data
+d3.csv("../query.csv", function(data) {
+color.domain([-1,1]); // setting the range of the input data
 
 // Load GeoJSON data and merge with states data
 d3.json("../us-states.json", function(json) {
