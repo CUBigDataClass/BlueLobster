@@ -37,14 +37,14 @@ while(True):
 		total_seen[i] = 1
 	    average = states[i]/total_seen[i]
 
-        avg_csv = avg_csv + average + ','
-        states_csv = states_csv + state_list[i] + ','
-        csv_state = open('state_data.csv', 'w')
-        csv_avg = open('avg_data.csv', 'w')
-        csv_state.write(states_csv)
-        csv_avg.write(avg_csv)
-        csv_state.close()
-        csv_avg.close()
+            avg_csv = avg_csv + average + ','
+            states_csv = states_csv + state_list[i] + ','
+            csv_state = open('state_data.csv', 'w')
+            csv_avg = open('avg_data.csv', 'w')
+            csv_state.write(states_csv)
+            csv_avg.write(avg_csv)
+            csv_state.close()
+            csv_avg.close()
 
 	    insert = session.execute(
 		    """
