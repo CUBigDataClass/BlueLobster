@@ -87,3 +87,10 @@ li{
 h1{
   font-size:36px;
 }
+h2{
+  text-align: left;
+}
+.create{
+  list-style:none;
+  text-align:left;
+}
