@@ -75,11 +75,13 @@ public class SentimentAnalysisBolt implements IRichBolt {
 				for (final String str: lineSplit) {
 					commaSplit = Lists.newArrayList(Splitter.on(",").trimResults().omitEmptyStrings().split(str));
 					sentimap.put(commaSplit.get(0), Integer.parseInt(commaSplit.get(1)));
+					
 				}
 			} catch (final IOException ioException) {
 				System.exit(1);
 			}
 	      
+		   
 	   }
 	    
 	   @Override
@@ -104,7 +106,7 @@ public class SentimentAnalysisBolt implements IRichBolt {
 				   LOG.info(state);
 				   LOG.info(sentiment);
 				   
-				   writeToCassandra(state,sentiment); 
+				   //writeToCassandra(state,sentiment); 
 				   collector.emit(new Values(state,sentiment));
 			   }
 			   
@@ -274,13 +276,8 @@ public class SentimentAnalysisBolt implements IRichBolt {
 		   
 	   }
 	   
-	   public void writeToCassandra(String state, int sentiment) {
-		   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
-		   Session session = cluster.connect("storm");
-		   
-		   session.execute("INSERT INTO storm_data (id,state_name, state_sentiment) VALUES (:s, :s, :d) USING TTL 30",UUID.randomUUID(),state,sentiment);
-		   
-	   }
+
+	   
 	   
 
 }

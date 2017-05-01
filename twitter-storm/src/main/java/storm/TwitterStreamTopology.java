@@ -39,9 +39,8 @@ public class TwitterStreamTopology {
 		final TopologyBuilder topologyBuilder = new TopologyBuilder();
 		topologyBuilder.setSpout("kafka-spout", new KafkaSpout(kafkaConf), 1);
 		
-		//topologyBuilder.setBolt("locationbolt", new LocationBolt()).globalGrouping("kafka-spout");
 		topologyBuilder.setBolt("sentiment-analysis", new SentimentAnalysisBolt()).globalGrouping("kafka-spout");
-
+		topologyBuilder.setBolt("cassandra-writer", new CassandraBolt()).globalGrouping("sentiment-analysis");
 	    		
 		final LocalCluster localCluster = new LocalCluster();
 		localCluster.submitTopology("kafka-topology", new HashMap<>(), topologyBuilder.createTopology());
