@@ -1,7 +1,7 @@
 from cassandra.cluster import Cluster
 
 cluster = Cluster()
-session = cluster.connect('json_data')
+session = cluster.connect('storm')
 results = session.execute("SELECT * FROM tweets")
 for x in results:
     rows = x

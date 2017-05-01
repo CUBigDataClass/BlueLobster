@@ -1,8 +1,10 @@
 pip install cassandra-driver
 
+
+
 DESCRIBE keyspaces
 
-USE json_data ;
+USE storm ;
 
 CREATE TABLE tweets(
     tweets_id int PRIMARY KEY,
@@ -23,6 +25,14 @@ CREATE TABLE storm_data (
     );
 
 CREATE TABLE website_data (
+    id int PRIMARY KEY,
+    state_name text,
+    state_sentiment decimal
+    );
+
+
+// storm table for testing
+CREATE TABLE storm_data (
     id int PRIMARY KEY,
     state_name text,
     state_sentiment int

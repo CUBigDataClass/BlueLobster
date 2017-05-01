@@ -1,7 +1,10 @@
-<<<<<<< HEAD
-[2017-04-29 16:04:48,208] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
-[2017-04-29 16:14:48,231] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
-=======
-[2017-04-29 15:06:18,205] INFO [Group Metadata Manager on Broker 2]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
-[2017-04-29 15:16:18,179] INFO [Group Metadata Manager on Broker 2]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
->>>>>>> 4628d2d1f9b96c8fda0ce6c7e281d74ff2395c5c
+[2017-05-01 08:01:46,252] INFO [ReplicaFetcherManager on broker 0] Removed fetcher for partitions twitter-topic-0 (kafka.server.ReplicaFetcherManager)
+[2017-05-01 08:01:48,007] INFO [Kafka Server 0], shutting down (kafka.server.KafkaServer)
+[2017-05-01 08:01:48,007] INFO [Kafka Server 0], Starting controlled shutdown (kafka.server.KafkaServer)
+[2017-05-01 08:01:48,023] INFO [Kafka Server 0], Remaining partitions to move: twitter-topic-0 (kafka.server.KafkaServer)
+[2017-05-01 08:01:48,023] INFO [Kafka Server 0], Error code from controller: 0 (kafka.server.KafkaServer)
+[2017-05-01 08:01:53,024] WARN [Kafka Server 0], Retrying controlled shutdown after the previous attempt failed... (kafka.server.KafkaServer)
+[2017-05-01 08:04:56,836] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
+[2017-05-01 08:14:56,836] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
+[2017-05-01 08:24:56,836] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
+[2017-05-01 08:34:56,836] INFO [Group Metadata Manager on Broker 0]: Removed 0 expired offsets in 0 milliseconds. (kafka.coordinator.GroupMetadataManager)
