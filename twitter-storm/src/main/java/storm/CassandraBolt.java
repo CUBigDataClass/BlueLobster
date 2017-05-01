@@ -56,6 +56,8 @@ public class CassandraBolt implements IRichBolt {
 	   public void prepare(Map stormConf, TopologyContext context,
 	      OutputCollector collector) {
 	      this.collector = collector;
+	      
+
 	  
 	   }
 	    
@@ -64,12 +66,12 @@ public class CassandraBolt implements IRichBolt {
 		   
 		   String state = input.getString(0);
 		   Integer sentiment = input.getInteger(1);
-
 		   Cluster cluster = Cluster.builder().addContactPoint("127.0.0.1").build();
 		   Session session = cluster.connect("storm");
+
 		   session.execute("INSERT INTO storm_data (id,state_name, state_sentiment) VALUES (:s, :s, :d) USING TTL 30",UUID.randomUUID(),state,sentiment);
 		   try {
-			Thread.sleep(1000);
+			Thread.sleep(1500); // shhhh.....
 		   } catch (InterruptedException e) {
 			   e.printStackTrace();
 		   }

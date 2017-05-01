@@ -99,7 +99,7 @@ public class SentimentAnalysisBolt implements IRichBolt {
 			   String tweetText = (String) jsonObject.get("text");
 			   String cleanTweet = cleanTweet(tweetText);
 			   state = getState(cleanTweet);
-			   
+			   UUID uuid = UUID.randomUUID();
 			   // only compute sentiment of tweets that we can find a state for 
 			   if (!state.equals("N/A")) {
 				   sentiment = getSentiment(cleanTweet);
@@ -107,7 +107,7 @@ public class SentimentAnalysisBolt implements IRichBolt {
 				   LOG.info(sentiment);
 				   
 				   //writeToCassandra(state,sentiment); 
-				   collector.emit(new Values(state,sentiment));
+				   collector.emit(new Values(uuid,state,sentiment));
 			   }
 			   
 		   } catch (ParseException e) {
@@ -127,7 +127,7 @@ public class SentimentAnalysisBolt implements IRichBolt {
 	   
 	   @Override
 	   public void declareOutputFields(OutputFieldsDeclarer declarer) {
-	      declarer.declare(new Fields("state","sentiment"));
+	      declarer.declare(new Fields("id","state","sentiment"));
 	   }
 
 	   @Override

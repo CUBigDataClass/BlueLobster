@@ -15,6 +15,9 @@ import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Tuple;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+
 import clojure.lang.Named;
 
 import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
@@ -23,6 +26,7 @@ import static org.apache.storm.cassandra.client.CassandraConf.*;
 
 import storm.LoggerBolt;
 
+import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
 
 public class TwitterStreamTopology {
 	
@@ -35,13 +39,21 @@ public class TwitterStreamTopology {
 		final String clientId = "storm-consumer";
 		final SpoutConfig kafkaConf = new SpoutConfig(zkrHosts, kafkaTopic, zkRoot, clientId);
 		kafkaConf.scheme = new SchemeAsMultiScheme(new StringScheme());
-
+		
 		final TopologyBuilder topologyBuilder = new TopologyBuilder();
 		topologyBuilder.setSpout("kafka-spout", new KafkaSpout(kafkaConf), 1);
 		
 		topologyBuilder.setBolt("sentiment-analysis", new SentimentAnalysisBolt()).globalGrouping("kafka-spout");
-		topologyBuilder.setBolt("cassandra-writer", new CassandraBolt()).globalGrouping("sentiment-analysis");
-	    		
+		
+		//topologyBuilder.setBolt("cassandra-writer", new CassandraBolt()).globalGrouping("sentiment-analysis");
+		
+	    topologyBuilder.setBolt("cassandra-writer", new CassandraWriterBolt(
+	            async(
+	                simpleQuery("INSERT INTO storm_data (id,state_name, state_sentiment) VALUES (:s, :s, :d) USING TTL 30")
+	                    .with( all() )
+	                )
+	        )).addConfiguration(CASSANDRA_KEYSPACE,"storm").globalGrouping("sentiment-analysis");
+		
 		final LocalCluster localCluster = new LocalCluster();
 		localCluster.submitTopology("kafka-topology", new HashMap<>(), topologyBuilder.createTopology());
 	}
