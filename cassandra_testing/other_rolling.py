@@ -13,6 +13,7 @@ total_seen = [0] * 50
 cluster = Cluster()
 session = cluster.connect('storm')
 while(True):
+    time.sleep(30)
     results = session.execute("SELECT * FROM storm_data")
     for x in results:
         rows = x
@@ -25,17 +26,16 @@ while(True):
                 states[i] += float(state_sentiment)
                 total_seen[i] += 1.0
 
-	for i in range(0, len(states)):
-            if(total_seen[i] == 0):
-                total_seen[i] = 1
-    	    average = states[i]/total_seen[i]
-            print 'The average is: ', average, ' for state: ', state_list[i]
-    	    insert = session.execute(
-    		    """
-    		    INSERT INTO website_data (id, state_name, state_sentiment)
+    for i in range(0, len(state_list)):
+        if(total_seen[i] == 0):
+            total_seen[i] = 1
+        average = states[i]/total_seen[i]
+        print 'The average is: ', average, ' for state: ', state_list[i]
+        insert = session.execute(
+            """
+                INSERT INTO website_data (id, state_name, state_sentiment)
     		    VALUES(%s, %s, %s)
     		    """,
     		    (i, state_list[i], average)
     		    )
 
-    time.sleep(30)
