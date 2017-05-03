@@ -5,6 +5,7 @@ sudo yum install vim
 curl -O https://bootstrap.pypa.io/get-pip.py
 python get-pip.py --user
 pip install awscli --upgrade --user
+sudo easy_install pip 
 #cassandra driver
 sudo pip install cassandra-driver
 
